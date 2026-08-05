@@ -50,7 +50,7 @@ repo's were distilled *from*, via a genericizing rewrite, not a copy).
   skills instead of (or alongside) this repo's — they cover the same
   ground with real tool names.
 - **[`agentic-coding-kit`](https://github.com/primax79/agentic-coding-kit)** —
-  no dependency either way. Its `kilo-claude-tools` plugin is about
+  no dependency either way. Its `agent-tooling-meta` plugin is about
   *configuring* Kilo/Claude as installed tools; this repo is about
   *delegating work* between them. Related "meta" concern, genuinely
   different boundary — see that repo's
