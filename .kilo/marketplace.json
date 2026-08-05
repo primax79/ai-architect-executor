@@ -1,0 +1,27 @@
+{
+  "name": "ai-architect-executor",
+  "description": "Protocol-agnostic Architect/Executor AI delegation pattern and skills",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "orchestration-methodology",
+      "description": "Orchestrate Executor agents using discovery-first and non-blocking delegation",
+      "source": "./plugins/architect-executor/skills/orchestration-methodology"
+    },
+    {
+      "name": "headless-executor-contract",
+      "description": "Behavioral contract for an Executor agent running background tasks",
+      "source": "./plugins/architect-executor/skills/headless-executor-contract"
+    },
+    {
+      "name": "conflict-resolver",
+      "description": "Resolve merge conflicts produced by parallel Executor tasks",
+      "source": "./plugins/architect-executor/skills/conflict-resolver"
+    },
+    {
+      "name": "delegation-roi-analysis",
+      "description": "Evaluate delegation efficiency and ROI analysis",
+      "source": "./plugins/architect-executor/skills/delegation-roi-analysis"
+    }
+  ]
+}
