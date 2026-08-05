@@ -1,0 +1,36 @@
+{
+  "skills": [
+    {
+      "name": "skills/conflict-resolver",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "skills/delegation-roi-analysis",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "skills/headless-executor-contract",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "skills/orchestration-methodology",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "skills/task-delegation",
+      "files": [
+        "SKILL.md",
+        "references/worktree-git-plumbing.md",
+        "scripts/apply_fix_to_worktree.sh"
+      ]
+    }
+  ]
+}

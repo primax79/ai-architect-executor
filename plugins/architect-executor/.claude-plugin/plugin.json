@@ -1,0 +1,8 @@
+{
+  "name": "architect-executor",
+  "version": "0.1.0",
+  "description": "Orchestration methodology (6 phases), headless-executor behavioral contract, conflict resolution, delegation ROI analysis, and manual task-delegation authoring/verification - all protocol-agnostic",
+  "author": {
+    "name": "Alfredo Oliviero"
+  }
+}

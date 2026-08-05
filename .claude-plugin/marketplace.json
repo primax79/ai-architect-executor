@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ai-architect-executor",
+  "description": "The generic, protocol-agnostic Architect/Executor pattern for delegating work from an orchestrating AI to a worker AI - task discovery, isolation, delegation, monitoring, verification, and a headless-worker behavioral contract",
+  "owner": {
+    "name": "Alfredo Oliviero"
+  },
+  "plugins": [
+    {
+      "name": "architect-executor",
+      "description": "Orchestration methodology (6 phases), headless-executor behavioral contract, conflict resolution, delegation ROI analysis, and manual task-delegation authoring/verification - all protocol-agnostic. Concrete tool bindings for a specific executor live in that binding's own repo, e.g. kilo-mcp.",
+      "author": {
+        "name": "Alfredo Oliviero"
+      },
+      "category": "development",
+      "source": "./plugins/architect-executor"
+    }
+  ]
+}

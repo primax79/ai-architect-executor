@@ -1,0 +1,12 @@
+{
+  "skills": [
+    {
+      "name": "task-delegation",
+      "files": [
+        "SKILL.md",
+        "references/worktree-git-plumbing.md",
+        "scripts/apply_fix_to_worktree.sh"
+      ]
+    }
+  ]
+}
