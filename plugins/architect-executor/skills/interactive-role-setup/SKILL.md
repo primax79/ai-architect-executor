@@ -21,9 +21,11 @@ piece of work tolerates being done poorly, not which model should do it:
 | `bulk-execution` | High-volume implementation under a written spec | What gets delegated to the Executor |
 | `exploration` | High volume, low judgment, read-only | RAG search, codebase Q&A |
 
-This skill is the missing link: it asks the operator, one question at a time, what they
-actually have for each profile, and writes the answer to a config file that the rest of
-the kit can read.
+This skill is the missing link: it discovers what's actually reachable, ranks it into
+capability tiers with the evidence recorded, proposes a full four-profile mapping with a
+one-line justification each, and only then asks the operator to confirm or correct —
+writing the result to a config file the rest of the kit can read. The operator's job is
+reviewing a proposal, not producing one from a blank slate.
 
 ## What this skill does NOT do — an explicit constraint, not an oversight
 
@@ -58,6 +60,7 @@ Global, one mapping per machine/operator:
 host = "claude-code"
 model = "opus"
 effort = "high"
+basis = "operator-stated"  # optional — see "Ranking" in Guided flow; omitted below on purpose
 last_verified = "2026-08-06"
 
 [roles.orchestration]
@@ -88,18 +91,104 @@ only if a real case for per-project differentiation shows up.
 
 ## Guided flow
 
-For each of the four profiles, in order:
+The skill performs the capability analysis itself; the operator reviews and corrects a
+proposal instead of producing one from a blank slate. Confirmation still happens per
+profile at the end — what changes is what's being confirmed.
 
-1. Ask: "For `<profile>` work (one-sentence explanation of what that means), what do you
-   have available?" — don't present a provider menu; let the operator describe their own
-   setup in their own words.
-2. If the target host is queryable (e.g. Kilo exposes `kilo_list_models`), use that to
-   propose concrete options instead of asking the operator to type a model ID from memory.
-3. Record the choice (host, model/tier, effort if applicable, today's date as
-   `last_verified`) in `roles.toml`.
-4. Move to the next profile.
+The hard constraint that shapes every step below: **the kit carries no hardcoded model
+lineup in its logic.** The ranking cannot be a lookup table — it has to be derived at
+runtime from evidence, and the evidence has to be recorded so a wrong ranking is visible
+rather than silent.
 
-At the end, summarize the full mapping and ask for confirmation before writing the file.
+### 1. Discovery
+
+Enumerate what's *reachable*, not just what's currently configured — the operator is
+usually running inside one of the hosts being mapped, so read before asking:
+
+- **Kilo**: call its live model-listing tool unfiltered. The currently configured default
+  is one entry, not the candidate set.
+- **Claude Code**: the running session's own model (visible directly, no file read
+  needed), `~/.claude/settings.json`'s `model` key, `CLAUDE_CODE_SUBAGENT_MODEL` in the
+  environment, and — where readable — the set of models the plan/organization actually
+  permits. An org-managed seat with a restricted allowlist has a different candidate set
+  than a personal plan.
+- Any other host reachable in the environment (e.g. `~/.config/kilo/kilo.jsonc`'s
+  `model`/`small_model`/`agent.*.model` keys, if that host is in play).
+
+Record, per candidate, whatever metadata the host actually returns — identifier,
+provider, context window, cost, tier naming, effort support. Never invent a field the
+host didn't supply, and never substitute a memorized model lineup for this step (see
+"Ranking" for the one narrow, explicitly fallible exception).
+
+A host that can't be enumerated isn't silently skipped — record which host and why; it
+resurfaces at gap reporting.
+
+### 2. Ranking
+
+Sort each host's candidates into capability tiers, separately per host — a Kilo model and
+a Claude Code model are usually not competing for the same profile, so there's no single
+cross-host scale to place them on. Use whichever evidence is actually available, in this
+order of preference, and **record which one was used** as the role's `basis`:
+
+1. `host-metadata` — explicit tier fields, cost, or context window returned by the host
+   itself. Cost ordering is a reasonable proxy for capability ordering within one provider
+   when nothing more explicit is available.
+2. `provider-tier-naming` — the host's own tier vocabulary, when it exposes one.
+3. `model-self-knowledge` — the executing model's own knowledge of the lineup it's part
+   of. Usable, but explicitly fallible and version-dependent; say so out loud whenever a
+   ranking rests on it.
+4. `operator-stated` — asking the operator directly. The correct fallback when the above
+   are absent or contradictory, not a failure state.
+
+An unexplained tier assignment is a defect, not a shortcut: the point of recording the
+basis is that the operator can see *why* a model landed where it did and correct a wrong
+premise instead of a wrong answer.
+
+### 3. Mapping
+
+Propose all four profiles in one pass — host + model + effort (where the host supports
+it) + a one-line justification grounded in error tolerance, not in model marketing:
+
+- `deep-reasoning` → the highest tier reachable on its host. Failures here are silent;
+  capability is bought regardless of how easy a given task looks.
+- `orchestration` → a mid tier. Failures here are loud and immediate, and this is also
+  where most turns go — it dominates consumption more than it dominates risk.
+- `bulk-execution` → whatever the Executor host offers at high throughput; cost matters
+  most here because volume is highest.
+- `exploration` → the lowest adequate tier — read-only, high volume, errors obvious on
+  sight.
+
+Effort is a second axis, not a tie-break: propose it explicitly wherever the host supports
+it, following this rule — a high tier at reduced effort is usually worse than a mid tier
+at full effort, because it pays for the expensive model while discarding the depth it was
+chosen for.
+
+### 4. Gap reporting
+
+Partial or degenerate discovery gets named, not papered over:
+
+- **Fewer distinct tiers than profiles** — say plainly that some roles collapse onto the
+  same model, and what that costs, rather than presenting a mapping that looks
+  differentiated but isn't.
+- **No low-tier option** — `exploration`/`bulk-execution` will run expensive; worth
+  knowing before it shows up as consumption.
+- **No high-tier option** — `deep-reasoning` is being done on something that doesn't
+  really suit it. The single most consequential gap, because its failures are silent by
+  definition.
+- **A host that couldn't be enumerated** — state which, and that any profile mapped
+  through it rests on incomplete discovery.
+
+### 5. Confirm, then persist
+
+Present the full proposal as a table — profile, host, model, effort, justification,
+ranking basis — then run the per-profile confirm-or-correct step: ask whether each row is
+what the operator wants, or something else. Never skip this even when discovery and
+ranking were clean: current/discovered config is evidence of what's *available*, not of
+what the operator *wants* for a given profile — a cheap default configured for cost
+reasons is not evidence they want it for `deep-reasoning`.
+
+On confirmation, write `roles.toml` in the existing shape plus the optional `basis` field
+from step 2 (see "Config file" above). Nothing else about the schema changes.
 
 ## Verification
 
@@ -137,6 +226,12 @@ configuration instead of code.
   immediately on explicit request ("check whether the role setup still holds"). This is a
   starting point, not a law — revise the number if it proves too chatty or too stale in
   practice.
+- **Re-verification re-runs Discovery, not just a status check.** If a fresh Discovery
+  pass (step 1 of the Guided flow) surfaces a candidate that didn't factor into the
+  original Ranking — a new model, a changed allowlist — surface that as a prompt to
+  re-run the analysis for the affected role. Never silently rewrite `roles.toml`: a
+  mapping changing underneath the operator is exactly the invisible drift this skill
+  exists to prevent.
 - **Attach it to something, or it won't run.** A validator nobody invokes implies a
   guarantee that doesn't exist, which is worse than no validator. The deterministic half
   of verification lives in `scripts/validate_roles.py` (see below) and is wired into
@@ -171,7 +266,11 @@ Two independent groups of checks:
     field was left empty", not "this field lies");
   - flags any `effort = "xhigh"` paired with a model known not to support it, against a
     small hardcoded table that degrades to "skip, unknown model" rather than failing
-    closed when a model ID it doesn't recognize shows up.
+    closed when a model ID it doesn't recognize shows up;
+  - if a role sets `basis`, its value must be one of the four evidence-basis slugs from
+    "Ranking" above (`host-metadata`, `provider-tier-naming`, `model-self-knowledge`,
+    `operator-stated`) — `basis` itself stays optional, this only catches a typo'd or
+    invented one.
 
 ## `skill-requirements.json`
 

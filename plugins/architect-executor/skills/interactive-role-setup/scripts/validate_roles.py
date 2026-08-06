@@ -8,7 +8,8 @@ Two independent groups of checks — see ../SKILL.md "Verification" and
    every skill in a plugin declares a valid profile in skill-requirements.json,
    and nothing declares a model.
 2. Operator-config (only when --roles-file is given and exists): all four
-   roles populated, host/model non-empty, effort valid for the pinned model.
+   roles populated, host/model non-empty, effort valid for the pinned model,
+   and `basis` (if set) is a known evidence-basis slug.
 
 Exit code is non-zero if any check fails, so this can gate a pre-commit hook.
 """
@@ -19,6 +20,11 @@ import re
 import sys
 
 PROFILES = {'deep-reasoning', 'orchestration', 'bulk-execution', 'exploration'}
+
+# Order of preference from SKILL.md "Guided flow" > "Ranking" — the evidence a tier
+# assignment can rest on. `basis` itself is optional; when present it must be one of
+# these, so a typo'd or invented value doesn't pass silently.
+BASIS_VALUES = {'host-metadata', 'provider-tier-naming', 'model-self-knowledge', 'operator-stated'}
 
 # Best-effort, not authoritative: models known NOT to support `xhigh` effort,
 # matched by substring against the model/tier string in roles.toml. Silently
@@ -69,14 +75,15 @@ def check_kit_internal(plugin_dir):
 
 # ---------- tiny flat TOML reader for roles.toml's known shape ----------
 # roles.toml only ever has [roles.<profile>] sections with quoted string
-# values, so a hand-rolled reader avoids a tomllib/tomli dependency on
-# Python < 3.11 (this repo doesn't otherwise need one).
+# values (plus an optional trailing comment), so a hand-rolled reader avoids
+# a tomllib/tomli dependency on Python < 3.11 (this repo doesn't otherwise
+# need one).
 
 def read_roles_toml(path):
     roles = {}
     current = None
     section_re = re.compile(r'^\[roles\.([a-z-]+)\]$')
-    kv_re = re.compile(r'^([a-zA-Z_]+)\s*=\s*"([^"]*)"$')
+    kv_re = re.compile(r'^([a-zA-Z_]+)\s*=\s*"([^"]*)"\s*(?:#.*)?$')
     for line in path.read_text().splitlines():
         line = line.strip()
         if not line or line.startswith('#'):
@@ -109,6 +116,10 @@ def check_operator_config(roles_file):
         if effort == 'xhigh' and any(s in model.lower() for s in KNOWN_NO_XHIGH_SUBSTRINGS):
             ok = fail(f"{roles_file}: role '{profile}' pins effort=xhigh on {model!r}, "
                       f"which is known not to support it — silently degrades to a lower effort")
+        basis = entry.get('basis')
+        if basis and basis not in BASIS_VALUES:
+            ok = fail(f"{roles_file}: role '{profile}' has invalid basis {basis!r} "
+                      f"(must be one of {sorted(BASIS_VALUES)}, or omitted)")
     return ok
 
 
