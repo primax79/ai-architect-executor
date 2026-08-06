@@ -44,19 +44,28 @@ repo's were distilled *from*, via a genericizing rewrite, not a copy).
 ## Relationship with the other repos in this family
 
 - **[`kilo-mcp`](https://github.com/primax79/kilo-mcp)** — depends on this
-  repo conceptually (it's the concrete Kilo binding of the pattern
-  documented here), though not as a hard install-time dependency. If
-  you're driving Kilo Code specifically via MCP, install `kilo-mcp`'s
-  skills instead of (or alongside) this repo's — they cover the same
-  ground with real tool names.
+  repo at build time: its skills are *generated* from this repo's
+  `SKILL.template.md` sources plus its own binding maps (`bindings/*.json`,
+  see `scripts/regenerate_bound_skills.py` there), not hand-duplicated.
+  Install `kilo-mcp`'s skills if you're driving Kilo Code via MCP — they
+  carry the real tool names. Install this repo's skills for a different
+  binding, or the protocol-agnostic form. **Never install both**: same
+  methodology, same activation triggers, guaranteed to compete for the
+  same description match.
 - **[`agentic-coding-kit`](https://github.com/primax79/agentic-coding-kit)** —
-  no dependency either way. Its `agent-tooling-meta` plugin is about
-  *configuring* Kilo/Claude as installed tools; this repo is about
-  *delegating work* between them. Related "meta" concern, genuinely
-  different boundary — see that repo's
+  one real dependency in this direction: several skills here
+  (`task-spec-authoring`, `orchestration-methodology`) reference the
+  `task/` tree convention owned by that repo's `macroplan-authoring` skill
+  (`common-tools` plugin) for multi-session/delegated work. Install that
+  plugin alongside this one if you use macroplan-style task trees — this
+  repo does not vendor or duplicate that convention (see
+  `plugins/architect-executor/dependencies.json` for the machine-readable
+  record; informational only, neither tool's installer enforces it today).
+  Everything else about the relationship is as before: its `agent-tooling-meta` plugin is about
+  *configuring* Kilo/Claude as installed tools, this repo is about
+  *delegating work* between them — see that repo's
   [`docs/01-concepts.md`](https://github.com/primax79/agentic-coding-kit/blob/main/docs/01-concepts.md)
-  if it's not obvious from the description alone. General Claude
-  Code/Kilo Code plugin & marketplace mechanics are documented there, not
+  for general Claude Code/Kilo Code plugin & marketplace mechanics, not
   repeated here.
 - **[`gcube-ai-toolkit`](https://github.com/primax79/gcube-ai-toolkit)** —
   no dependency; disjoint content (gCube/D4Science-specific vs. generic).
