@@ -1,0 +1,11 @@
+{
+  "skills": [
+    {
+      "name": "skills/interactive-role-setup",
+      "files": [
+        "SKILL.md",
+        "scripts/validate_roles.py"
+      ]
+    }
+  ]
+}

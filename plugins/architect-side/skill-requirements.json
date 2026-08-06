@@ -7,10 +7,6 @@
     "profile": "deep-reasoning",
     "reason": "Beyond counting and grouping it proposes changes to delegation policy — a wrong recommendation has no test to catch it."
   },
-  "headless-executor-contract": {
-    "profile": "bulk-execution",
-    "reason": "Defines how the Executor itself behaves — the role it governs is the high-volume, spec-driven implementation side, not the Architect side reading it."
-  },
   "orchestration-methodology": {
     "profile": "orchestration",
     "reason": "Dispatch, polling, bookkeeping, close-out — mistakes here surface immediately as a stuck task or a failed verification step."
@@ -22,9 +18,5 @@
   "task-spec-authoring": {
     "profile": "deep-reasoning",
     "reason": "Spec authoring and substantial verification of an Executor's output — a bad spec gets implemented faithfully, and a bad review approves it."
-  },
-  "interactive-role-setup": {
-    "profile": "deep-reasoning",
-    "reason": "A wrong role-to-model mapping degrades every other skill silently, downstream, for as long as it goes unnoticed."
   }
 }

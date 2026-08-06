@@ -15,20 +15,6 @@
       ]
     },
     {
-      "name": "headless-executor-contract",
-      "files": [
-        "SKILL.md",
-        "SKILL.template.md"
-      ]
-    },
-    {
-      "name": "interactive-role-setup",
-      "files": [
-        "SKILL.md",
-        "scripts/validate_roles.py"
-      ]
-    },
-    {
       "name": "orchestration-methodology",
       "files": [
         "SKILL.md",

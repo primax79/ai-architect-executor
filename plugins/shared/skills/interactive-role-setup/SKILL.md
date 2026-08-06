@@ -246,7 +246,7 @@ a pure function of files on disk, and routing it through an LLM would cost token
 non-reproducible, and risk a violation getting "interpreted" as acceptable one time in ten.
 
 ```bash
-python3 scripts/validate_roles.py --plugin-dir <path/to/plugins/architect-executor> [--plugin-dir <path> ...] [--roles-file ~/.config/ai-architect-executor/roles.toml]
+python3 scripts/validate_roles.py --plugin-dir <path/to/plugins/architect-side> --plugin-dir <path/to/plugins/executor-side> --plugin-dir <path/to/plugins/shared> [--roles-file ~/.config/ai-architect-executor/roles.toml]
 ```
 
 Two independent groups of checks:

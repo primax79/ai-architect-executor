@@ -7,13 +7,31 @@
   },
   "plugins": [
     {
-      "name": "architect-executor",
-      "description": "Orchestration methodology (6 phases), headless-executor behavioral contract, conflict resolution, delegation ROI analysis, and manual task-delegation authoring/verification - all protocol-agnostic. Concrete tool bindings for a specific executor live in that binding's own repo, e.g. kilo-mcp.",
+      "name": "architect-side",
+      "description": "Orchestration methodology (6 phases), delegation ROI analysis, conflict resolution, task-spec authoring, and manual task-delegation/git-worktree mechanics - all protocol-agnostic. Install if you're the orchestrating AI. Concrete tool bindings for a specific executor live in that binding's own repo, e.g. kilo-mcp.",
       "author": {
         "name": "Alfredo Oliviero"
       },
       "category": "development",
-      "source": "./plugins/architect-executor"
+      "source": "./plugins/architect-side"
+    },
+    {
+      "name": "executor-side",
+      "description": "The headless-executor behavioral contract - zero interactivity, focus_files, mandatory Final Report, fail fast. Install if you're the agent executing background work delegated by an orchestrating Architect AI.",
+      "author": {
+        "name": "Alfredo Oliviero"
+      },
+      "category": "development",
+      "source": "./plugins/executor-side"
+    },
+    {
+      "name": "shared",
+      "description": "interactive-role-setup - maps the kit's abstract role profiles to whatever models/hosts you actually have. Useful regardless of which side you install.",
+      "author": {
+        "name": "Alfredo Oliviero"
+      },
+      "category": "development",
+      "source": "./plugins/shared"
     }
   ]
 }

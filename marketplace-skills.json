@@ -3,37 +3,51 @@
     {
       "id": "conflict-resolver",
       "description": "Resolve merge conflicts in files produced by parallel Executor tasks - find conflict markers, merge both versions preserving the semantics of each parallel feature, verify with linter/build.",
-      "category": "architect-executor",
-      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-executor/skills/conflict-resolver",
+      "category": "architect-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-side/skills/conflict-resolver",
       "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/conflict-resolver.tar.gz"
     },
     {
       "id": "delegation-roi-analysis",
       "description": "Evaluate delegation efficiency - ROI analysis (delegation cost vs. hypothetical inline-generation cost), defect-pattern review from logged issues, and feedback-loop proposals for better task specifications. Use when asked whether delegating to an Executor is paying off. Methodology only - concrete telemetry-tool calls live in the specific binding's own repo (e.g. kilo-mcp's mcp-metrics-analyst).",
-      "category": "architect-executor",
-      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-executor/skills/delegation-roi-analysis",
+      "category": "architect-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-side/skills/delegation-roi-analysis",
       "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/delegation-roi-analysis.tar.gz"
-    },
-    {
-      "id": "headless-executor-contract",
-      "description": "Behavioral contract for an Executor agent running background tasks delegated by an orchestrating Architect AI - zero interactivity, focus_files contract, mandatory Final Report, fail fast, scope discipline. Protocol-agnostic (applies whether delegated over MCP, a CLI wrapper, or by hand).",
-      "category": "architect-executor",
-      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-executor/skills/headless-executor-contract",
-      "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/headless-executor-contract.tar.gz"
     },
     {
       "id": "orchestration-methodology",
       "description": "Orchestrate an Executor agent through the Architect/Executor pattern - discovery-first exploration, isolation before delegating, non-blocking parallel delegation, complexity-scaled monitoring/intervention, real verification (not just reading the report), and defect telemetry. Use when coordinating development work delegated to another agent.",
-      "category": "architect-executor",
-      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-executor/skills/orchestration-methodology",
+      "category": "architect-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-side/skills/orchestration-methodology",
       "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/orchestration-methodology.tar.gz"
     },
     {
+      "id": "task-spec-authoring",
+      "description": "Write task specifications for an Executor agent and calibrate how deeply to verify what it produces - task granularity, the negative-claim rule, reference-drift, caller-tracing, one-task-one-commit, and risk-calibrated verification depth. Protocol-agnostic: applies whether the spec is dispatched through an MCP connector, a CLI wrapper, or handed over by hand.",
+      "category": "architect-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-side/skills/task-spec-authoring",
+      "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/task-spec-authoring.tar.gz"
+    },
+    {
       "id": "task-delegation",
-      "description": "Author task specifications for an Executor agent (Kilo, or any other fast, semi-autonomous coding agent working alongside an Architect AI, typically in its own dedicated git worktree) and independently verify what it implements - via manual spec-writing and git-based interaction, as an alternative to delegating through an MCP-based connector (e.g. kilo-mcp's tools - functional and the recommended default where available; that path is covered by that connector's own skills, this skill must not be conflated with those). This skill's spec-writing and verification guidance applies regardless of which path dispatches the work, but its execution mechanics (git worktree commands, session inspection) describe the manual/CLI path specifically - use it when preparing a task/macroplan file meant to be handed to an Executor by hand, or when reviewing/verifying commits it has already produced - including interacting with its live worktree via git, applying fixes to it, and deciding what verification depth a given task warrants. Invoke explicitly for this manual workflow.",
-      "category": "architect-executor",
-      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-executor/skills/task-delegation",
+      "description": "Manual, git-based mechanics for handing a task off to an Executor agent working in its own dedicated git worktree, and for interacting with its live worktree afterward - applying a fix directly when file-edit tools are permission-blocked there, and deciding when it's safe to merge, rebase, or otherwise touch a branch it's actively working on.",
+      "category": "architect-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/architect-side/skills/task-delegation",
       "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/task-delegation.tar.gz"
+    },
+    {
+      "id": "headless-executor-contract",
+      "description": "Behavioral contract for an Executor agent running background tasks delegated by an orchestrating Architect AI - zero interactivity, focus_files contract, mandatory Final Report, fail fast, scope discipline. Protocol-agnostic (applies whether delegated over MCP, a CLI wrapper, or by hand).",
+      "category": "executor-side",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/executor-side/skills/headless-executor-contract",
+      "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/headless-executor-contract.tar.gz"
+    },
+    {
+      "id": "interactive-role-setup",
+      "description": "Interactively maps the kit's four abstract role profiles (deep-reasoning, orchestration, bulk-execution, exploration) to whatever models/hosts the operator actually has available, persists the mapping to roles.toml, and verifies it against the live host config rather than trusting it blindly.",
+      "category": "shared",
+      "githubUrl": "https://github.com/primax79/ai-architect-executor/tree/main/plugins/shared/skills/interactive-role-setup",
+      "content": "https://github.com/primax79/ai-architect-executor/releases/download/skills-latest/interactive-role-setup.tar.gz"
     }
   ]
 }

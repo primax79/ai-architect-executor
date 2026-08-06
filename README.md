@@ -26,20 +26,26 @@ monitoring to task risk) — is the actual leverage. This repo is that
 discipline, written down once instead of re-derived per project or
 rediscovered the hard way per session.
 
-## What's in the `architect-executor` plugin
+## What's in this repo — three plugins, install the side(s) you need
 
-| Skill | Covers |
-| --- | --- |
-| `orchestration-methodology` | The 6-phase methodology: discovery, isolation, delegation, monitoring & intervention, verification & review, closure & telemetry. |
-| `headless-executor-contract` | The Executor-side behavioral contract for running headless: zero interactivity, `focus_files`, mandatory Final Report, fail fast, scope discipline. |
-| `conflict-resolver` | Resolving merge conflicts between parallel Executor outputs. |
-| `delegation-roi-analysis` | Evaluating whether delegation is paying off — cost vs. inline-generation estimate, defect-pattern review, feedback-loop proposals. |
-| `task-delegation` | Authoring task specs and calibrating verification depth for the **manual** (non-protocol) delegation path — git-worktree mechanics included. |
+| Plugin | Skill | Covers |
+| --- | --- | --- |
+| `architect-side` | `orchestration-methodology` | The 6-phase methodology: discovery, isolation, delegation, monitoring & intervention, verification & review, closure & telemetry. |
+| `architect-side` | `delegation-roi-analysis` | Evaluating whether delegation is paying off — cost vs. inline-generation estimate, defect-pattern review, feedback-loop proposals. |
+| `architect-side` | `conflict-resolver` | Resolving merge conflicts between parallel Executor outputs. |
+| `architect-side` | `task-spec-authoring` | Writing Executor task specs and calibrating verification depth — applies regardless of dispatch path. |
+| `architect-side` | `task-delegation` | The **manual** (non-protocol) delegation path specifically: git-worktree mechanics for handing off a task and interacting with its live worktree. |
+| `executor-side` | `headless-executor-contract` | The Executor-side behavioral contract for running headless: zero interactivity, `focus_files`, mandatory Final Report, fail fast, scope discipline. |
+| `shared` | `interactive-role-setup` | Maps the kit's abstract role profiles (`deep-reasoning`/`orchestration`/`bulk-execution`/`exploration`) to whatever models/hosts you actually have. Useful to either side. |
 
-All five are protocol-agnostic by design — no concrete tool names. The
-fully concrete version of the first four, naming actual MCP tools, lives
-in [`kilo-mcp`](https://github.com/primax79/kilo-mcp) (the skills this
-repo's were distilled *from*, via a genericizing rewrite, not a copy).
+All seven skills are protocol-agnostic by design — no concrete tool names.
+The fully concrete version of four of them (`orchestration-methodology`,
+`headless-executor-contract`, `conflict-resolver`, `delegation-roi-analysis`),
+naming actual MCP tools, is *generated* from this repo's templates in
+[`kilo-mcp`](https://github.com/primax79/kilo-mcp) — see
+`scripts/generate_binding.py` here and `scripts/regenerate_bound_skills.py`
+there. `task-spec-authoring`, `task-delegation`, and `interactive-role-setup`
+have no binding-specific counterpart — they don't need one.
 
 ## Relationship with the other repos in this family
 
@@ -59,7 +65,7 @@ repo's were distilled *from*, via a genericizing rewrite, not a copy).
   (`common-tools` plugin) for multi-session/delegated work. Install that
   plugin alongside this one if you use macroplan-style task trees — this
   repo does not vendor or duplicate that convention (see
-  `plugins/architect-executor/dependencies.json` for the machine-readable
+  `plugins/architect-side/dependencies.json` for the machine-readable
   record; informational only, neither tool's installer enforces it today).
   Everything else about the relationship is as before: its `agent-tooling-meta` plugin is about
   *configuring* Kilo/Claude as installed tools, this repo is about
@@ -80,20 +86,23 @@ cover the concepts/authoring/distribution detail in full; short version:
 
 ```bash
 claude plugin marketplace add https://github.com/primax79/ai-architect-executor.git
-/plugin install architect-executor
+/plugin install architect-side   # or executor-side, or shared - pick what you need
 ```
 
-**Kilo Code**, via `kilo-plugin-manager`:
+**Kilo Code**, via `kilo-plugin-manager` (pick the plugin(s) you need — `architect-side`,
+`executor-side`, `shared`, or several):
 
 ```bash
 python3 ~/.kilo/skills/kilo-plugin-manager/scripts/plugin_manager.py add https://github.com/primax79/ai-architect-executor.git --name ai-architect-executor
-python3 ~/.kilo/skills/kilo-plugin-manager/scripts/plugin_manager.py install architect-executor@ai-architect-executor
+python3 ~/.kilo/skills/kilo-plugin-manager/scripts/plugin_manager.py install architect-side@ai-architect-executor
 ```
 
-or Kilo's native Skill URLs (no extra tooling):
+or Kilo's native Skill URLs (no extra tooling, one URL per plugin):
 
 ```text
-https://raw.githubusercontent.com/primax79/ai-architect-executor/main/plugins/architect-executor/skills/
+https://raw.githubusercontent.com/primax79/ai-architect-executor/main/plugins/architect-side/skills/
+https://raw.githubusercontent.com/primax79/ai-architect-executor/main/plugins/executor-side/skills/
+https://raw.githubusercontent.com/primax79/ai-architect-executor/main/plugins/shared/skills/
 ```
 
 Regenerate `index.json` after any skill change: `python3 scripts/generate_skill_indices.py`.
