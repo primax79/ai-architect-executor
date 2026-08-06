@@ -38,7 +38,26 @@ fi
 # Warn (don't block) if there's a lot of unrelated live uncommitted work —
 # the caller should have already checked this, but a last-second guard
 # doesn't hurt.
-DIRTY_COUNT=$(git -C "$WORKTREE" status --short | grep -v -F "$TARGET_PATH" | wc -l | tr -d ' ')
+#
+# Exact-path comparison, not substring: git status --short's path starts at
+# column 4 (two status chars + one space), and a rename shows as
+# "R  old -> new" - only the "new" side counts. A grep -F match on
+# TARGET_PATH would both (a) die under `set -e`/`pipefail` when the
+# worktree is clean and grep finds nothing to match (its own no-match exit
+# status of 1 propagates), and (b) false-negative on a path that merely
+# contains TARGET_PATH as a substring (e.g. TARGET_PATH=src/db.py would
+# also swallow src/db.py.bak out of the dirty count).
+DIRTY_COUNT=0
+while IFS= read -r line; do
+  [ -z "$line" ] && continue
+  path="${line:3}"
+  case "$path" in
+    *" -> "*) path="${path##* -> }" ;;
+  esac
+  if [ "$path" != "$TARGET_PATH" ]; then
+    DIRTY_COUNT=$((DIRTY_COUNT + 1))
+  fi
+done < <(git -C "$WORKTREE" status --short)
 if [ "$DIRTY_COUNT" -gt 0 ]; then
   echo "Warning: $DIRTY_COUNT other path(s) have uncommitted changes in $WORKTREE." >&2
   echo "Make sure none of them are part of a live in-progress session before continuing." >&2
