@@ -2,6 +2,7 @@
 name: delegation-roi-analysis
 description: Evaluate delegation efficiency - ROI analysis (delegation cost vs. hypothetical inline-generation cost), defect-pattern review from logged issues, and feedback-loop proposals for better task specifications. Use when asked whether delegating to an Executor is paying off. Methodology only - concrete telemetry-tool calls live in the specific binding's own repo (e.g. kilo-mcp's mcp-metrics-analyst).
 ---
+<!-- GENERATED FROM SKILL.template.md — DO NOT EDIT BY HAND. Run generate_binding.py to regenerate. -->
 
 # delegation-roi-analysis
 

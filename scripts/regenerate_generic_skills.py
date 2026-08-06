@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""regenerate_generic_skills.py - regenerates this repo's own SKILL.md files
+from their SKILL.template.md sources (no binding map: template defaults
+everywhere). Frontmatter name/description come from the *current* committed
+SKILL.md on a fresh run (so this script has nowhere new to invent them from);
+pass --check to just verify no drift.
+
+Usage:
+  python3 scripts/regenerate_generic_skills.py [--check]
+"""
+import argparse
+import re
+import subprocess
+import sys
+import pathlib
+
+REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+SKILLS_DIR = REPO_ROOT / 'plugins' / 'architect-executor' / 'skills'
+GENERATOR = REPO_ROOT / 'scripts' / 'generate_binding.py'
+
+FRONTMATTER_RE = re.compile(r'^---\nname:\s*(.+?)\ndescription:\s*(.+?)\n---', re.DOTALL)
+
+
+def read_current_frontmatter(skill_md):
+    text = skill_md.read_text()
+    m = FRONTMATTER_RE.match(text)
+    if not m:
+        return None, None
+    return m.group(1).strip(), m.group(2).strip()
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--check', action='store_true')
+    args = ap.parse_args()
+
+    failures = 0
+    ran = 0
+    for template in sorted(SKILLS_DIR.glob('*/SKILL.template.md')):
+        skill_dir = template.parent
+        out_path = skill_dir / 'SKILL.md'
+        name, description = read_current_frontmatter(out_path)
+        if not name:
+            print(f"[FAIL] {out_path}: couldn't read current name/description to seed the generic pass")
+            failures += 1
+            continue
+
+        cmd = [sys.executable, str(GENERATOR), '--template', str(template),
+               '--generic-name', name, '--generic-description', description,
+               '--out', str(out_path)]
+        if args.check:
+            cmd.append('--check')
+
+        result = subprocess.run(cmd)
+        ran += 1
+        if result.returncode != 0:
+            failures += 1
+
+    verb = 'Checked' if args.check else 'Regenerated'
+    print(f"\n{verb} {ran} generic skill(s), {failures} failure(s).")
+    sys.exit(1 if failures else 0)
+
+
+if __name__ == '__main__':
+    main()

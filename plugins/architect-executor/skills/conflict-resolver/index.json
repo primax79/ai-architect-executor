@@ -3,7 +3,8 @@
     {
       "name": "conflict-resolver",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     }
   ]

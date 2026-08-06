@@ -1,26 +1,25 @@
 ---
-name: headless-executor-contract
-description: Behavioral contract for an Executor agent running background tasks delegated by an orchestrating Architect AI - zero interactivity, focus_files contract, mandatory Final Report, fail fast, scope discipline. Protocol-agnostic (applies whether delegated over MCP, a CLI wrapper, or by hand).
+name: {{NAME}}
+description: {{DESCRIPTION}}
 ---
-<!-- GENERATED FROM SKILL.template.md — DO NOT EDIT BY HAND. Run generate_binding.py to regenerate. -->
 
-# headless-executor-contract
+# {{NAME}}
 
-Use this skill when you (an AI coding agent) are executing background
+Use this skill when {{BLOCK:audience}}you (an AI coding agent) are executing background
 tasks on behalf of an orchestrating Architect AI, not interacting with a
-human directly.
+human directly{{/BLOCK}}.
 
 ## Logic and Behavior
 
-- **Zero interactivity:** you are running in the background, controlled by
+- **Zero interactivity:** {{BLOCK:zero_interactivity}}you are running in the background, controlled by
   another AI (the Architect). Do not ask the user questions. Do not offer
   choices. Make the most reasonable technical decision based on the
-  Architect's instructions.
+  Architect's instructions.{{/BLOCK}}
 - **Honor the contract:** The Architect defined `focus_files`. Read them
   before modifying anything.
 - **Produce the report:** At the end of your work cycle you MUST print the
   `Final Report` exactly as requested (Outcome, Files changed,
-  Verification, Issues). Your final message is parsed programmatically, so
+  Verification, Issues). Your final message is {{BLOCK:parsed_by}}parsed programmatically{{/BLOCK}}, so
   the report's Markdown formatting must be immaculate.
 - **Fail fast:** If a command (e.g. a build) keeps failing due to missing
   context, stop and mark the outcome as `partial` or `failed` in the Final

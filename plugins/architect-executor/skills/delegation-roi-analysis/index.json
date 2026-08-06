@@ -3,7 +3,8 @@
     {
       "name": "delegation-roi-analysis",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     }
   ]

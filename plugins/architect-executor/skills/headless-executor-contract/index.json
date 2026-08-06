@@ -3,7 +3,8 @@
     {
       "name": "headless-executor-contract",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     }
   ]

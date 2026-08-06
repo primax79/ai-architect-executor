@@ -3,19 +3,22 @@
     {
       "name": "skills/conflict-resolver",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     },
     {
       "name": "skills/delegation-roi-analysis",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     },
     {
       "name": "skills/headless-executor-contract",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     },
     {
@@ -28,7 +31,8 @@
     {
       "name": "skills/orchestration-methodology",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     },
     {

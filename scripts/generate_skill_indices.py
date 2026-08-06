@@ -13,6 +13,7 @@ Ported from gcube-ai-toolkit/scripts/generate_skill_indices.py, same format.
 
 import os
 import json
+import subprocess
 import sys
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,7 +125,20 @@ def generate_indices():
 
     print(f"Generated {plugin_level_count} plugin-level, {skills_dir_count} skills-dir-level, and {single_skill_count} individual skill index.json files!")
 
+def check_template_drift():
+    """Every SKILL.md generated from a SKILL.template.md must match its
+    template + defaults — catches hand-edits to generated files, or a
+    template change nobody regenerated from. See regenerate_generic_skills.py."""
+    script = os.path.join(ROOT_DIR, 'scripts', 'regenerate_generic_skills.py')
+    if not os.path.isfile(script):
+        return True
+    result = subprocess.run([sys.executable, script, '--check'])
+    return result.returncode == 0
+
+
 if __name__ == "__main__":
     generate_indices()
-    if not validate_skill_requirements():
+    ok = validate_skill_requirements()
+    ok = check_template_drift() and ok
+    if not ok:
         sys.exit(1)

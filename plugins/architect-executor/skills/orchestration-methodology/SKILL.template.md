@@ -1,11 +1,11 @@
 ---
-name: orchestration-methodology
-description: Orchestrate an Executor agent through the Architect/Executor pattern - discovery-first exploration, isolation before delegating, non-blocking parallel delegation, complexity-scaled monitoring/intervention, real verification (not just reading the report), and defect telemetry. Use when coordinating development work delegated to another agent.
+name: {{NAME}}
+description: {{DESCRIPTION}}
 ---
-<!-- GENERATED FROM SKILL.template.md — DO NOT EDIT BY HAND. Run generate_binding.py to regenerate. -->
 
-# orchestration-methodology
+# {{NAME}}
 
+{{BLOCK:intro}}
 This skill is for the **Architect** (the orchestrating AI) coordinating an
 **Executor** (a fast, semi-autonomous coding agent) through discovery,
 isolation, non-blocking parallel delegation, monitoring/intervention, and
@@ -16,33 +16,34 @@ same methodology. Concrete tool names for a specific binding (e.g. Kilo
 over MCP) live in that binding's own repo — see
 [`kilo-mcp`](https://github.com/primax79/kilo-mcp)'s `mcp-orchestrator`
 skill for the fully concrete version this skill was distilled from.
+{{/BLOCK}}
 
 ## Role discipline: delegate, don't implement
 
 You are the architect/orchestrator, not the implementer. When a task is
 scoped for delegation (a plan/macroplan task, or any request to "implement
 X" that this skill's description matches), implementation work goes
-through the delegation channel — not your own file-edit tools. This holds
+through {{TOOL:implement_call|the delegation channel}} — not your own {{TOOL:edit_tools|file-edit tools}}. This holds
 even when a task looks small or fast to do yourself; "it's simple, I'll
-just do it" is exactly how delegation gets silently skipped. If the delegation channel
+just do it" is exactly how delegation gets silently skipped. If {{TOOL:implement_call|the delegation channel}}
 is unavailable or fails, stop and say so instead of implementing in its
 place — don't silently fall back to doing the work yourself.
 
 The one exception is **verification-phase minor fixes**: while reviewing a
 Final Report (Phase 5 below), you may correct a small, obvious issue
-yourself directly in the Executor's worktree — a typo, a wrong import, a
+yourself directly in {{TOOL:executor_poss|the Executor's}} worktree — a typo, a wrong import, a
 misnamed variable — without a full round-trip. Anything bigger than a
-handful of lines, or that touches actual logic, goes back to the Executor via
-a corrective follow-up into the same session, not a direct edit. When
+handful of lines, or that touches actual logic, goes back to {{TOOL:executor_name|the Executor}} via
+{{BLOCK:corrective_call}}a corrective follow-up into the same session{{/BLOCK}}, not a direct edit. When
 in doubt, delegate rather than fix it yourself.
 
 ## Logic and Behavior
 
-- **Phase 1 — Discovery:** Explore the repository using the Executor's
+- **Phase 1 — Discovery{{BLOCK:phase1_suffix}}{{/BLOCK}}:** {{BLOCK:phase1_body}}Explore the repository using the Executor's
   semantic search capability (if it has one) before designing solutions.
   Do not guess filenames. Confirm the Executor's engine/model and
-  credentials are ready before dispatching anything.
-- **Phase 2 — Isolation:** delegation typically has **no isolation and no
+  credentials are ready before dispatching anything.{{/BLOCK}}
+- **Phase 2 — Isolation:** {{BLOCK:phase2_body}}delegation typically has **no isolation and no
   locking by default** — it runs directly in the target working directory,
   and nothing stops a second concurrent writer (another delegated task, or
   your own `git` commands) from racing it in the exact same tree. This is
@@ -75,8 +76,8 @@ in doubt, delegate rather than fix it yourself.
     parallel that will each run a server/container/process, explicitly
     assign each one a distinct port/container name/resource in the task
     instructions — decide this by design before dispatching, don't wait to
-    discover the collision mid-run.
-- **Phase 3 — Delegation:** dispatch implementation work through the
+    discover the collision mid-run.{{/BLOCK}}
+- **Phase 3 — Delegation:** {{BLOCK:phase3_body}}dispatch implementation work through the
   delegation channel. Prefer non-blocking delegation that returns
   immediately with a task handle — never block the conversation waiting on
   it. Pass whatever focus files were found during discovery, configure any
@@ -86,8 +87,8 @@ in doubt, delegate rather than fix it yourself.
   `macroplan-authoring` skill) and delegate one task file at a time — each
   task file is already scoped, self-contained, and has its own
   verification section, which maps directly onto one well-formed
-  delegation call.
-- **Phase 4 — Monitoring & Intervention:** scale how closely you watch a
+  delegation call.{{/BLOCK}}
+- **Phase 4 — Monitoring & Intervention:** {{BLOCK:phase4_body}}scale how closely you watch a
   task to its complexity/risk:
   - **Small, well-scoped tasks:** a single final-result check is enough.
   - **Large, multi-file, or high-risk tasks:** poll live progress
@@ -113,9 +114,9 @@ in doubt, delegate rather than fix it yourself.
     mechanism exists in your host, at minimum say explicitly in your
     response that the task is still running and how the user can check on
     it themselves, instead of implying you'll follow up when you have no
-    way to.
+    way to.{{/BLOCK}}{{ADD:phase4_extra}}
 - **Phase 5 — Verification & Review: NEVER trust the Final Report alone.**
-  Inspect the actual resulting diff/workspace status, then actually
+  {{BLOCK:phase5_body}}Inspect the actual resulting diff/workspace status, then actually
   **execute** what was built — reading the report or the diff is not
   verification, it's a summary. Across real delegation rounds, deviations
   that never surfaced from the report alone only showed up by running the
@@ -135,11 +136,11 @@ in doubt, delegate rather than fix it yourself.
     `diff` it for real against that source — don't trust the claim.
   - **Infra**: if there's a compose file, actually bring it up, wait for
     the healthcheck, and query the resulting service/DB for real.
-  - See the `task-delegation` skill for calibrating verification depth to
-    task risk in more detail.
-- **Phase 6 — Closure & Telemetry:** if defects are found, log them (vital
+  - See the {{TOOL:spec_skill_link|`task-delegation`}} skill for calibrating verification depth to
+    task risk in more detail.{{/BLOCK}}
+- **Phase 6 — Closure & Telemetry:** {{BLOCK:phase6_body}}if defects are found, log them (vital
   for continuous prompt/specification tuning — see `delegation-roi-analysis`)
-  and request a fix.
+  and request a fix.{{/BLOCK}}
   - **Merging: always checkout the target branch explicitly first.**
     Running `git merge --no-ff <feature-branch> -m "..." <target>` without
     checking out `<target>` first is a real, observed mistake — the
@@ -152,6 +153,7 @@ in doubt, delegate rather than fix it yourself.
     intended). Remove the worktree once merged and no longer needed
     (`git worktree remove <path>`).
 
-Remember: if the Executor exposes semantic codebase search as a standing
+{{BLOCK:closing}}Remember: if the Executor exposes semantic codebase search as a standing
 capability, it's useful for your own exploration and Q&A too — use it even
-when you are not delegating anything.
+when you are not delegating anything.{{/BLOCK}}
+{{ADD:end}}

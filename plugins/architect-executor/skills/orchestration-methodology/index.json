@@ -3,7 +3,8 @@
     {
       "name": "orchestration-methodology",
       "files": [
-        "SKILL.md"
+        "SKILL.md",
+        "SKILL.template.md"
       ]
     }
   ]
