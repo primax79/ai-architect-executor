@@ -17,6 +17,10 @@
   },
   "task-delegation": {
     "profile": "deep-reasoning",
+    "reason": "Deciding whether it's safe to touch a live Executor worktree, or applying a fix to one without direct file-edit access — a wrong call here corrupts or races a session with nothing to catch it."
+  },
+  "task-spec-authoring": {
+    "profile": "deep-reasoning",
     "reason": "Spec authoring and substantial verification of an Executor's output — a bad spec gets implemented faithfully, and a bad review approves it."
   },
   "interactive-role-setup": {

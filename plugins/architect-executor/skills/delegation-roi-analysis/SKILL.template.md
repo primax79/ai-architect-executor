@@ -32,5 +32,5 @@ this was distilled from.{{/BLOCK}}
 - **Feedback Loop:** {{BLOCK:feedback_loop}}if recurring patterns are found (e.g. missed edge
   cases, styling mismatches, frequent cancellations), propose adding
   specific guardrails to future task specifications, or creating targeted
-  Executor-side skills to close the gap — see `task-delegation` for how
+  Executor-side skills to close the gap — see `task-spec-authoring` for how
   task-spec quality itself is the main lever on defect rate.{{/BLOCK}}

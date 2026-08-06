@@ -135,7 +135,7 @@ in doubt, delegate rather than fix it yourself.
     `diff` it for real against that source — don't trust the claim.
   - **Infra**: if there's a compose file, actually bring it up, wait for
     the healthcheck, and query the resulting service/DB for real.
-  - See the `task-delegation` skill for calibrating verification depth to
+  - See the `task-spec-authoring` skill for calibrating verification depth to
     task risk in more detail.
 - **Phase 6 — Closure & Telemetry:** if defects are found, log them (vital
   for continuous prompt/specification tuning — see `delegation-roi-analysis`)
