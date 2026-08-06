@@ -15,7 +15,7 @@ import sys
 import pathlib
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
-SKILLS_DIR = REPO_ROOT / 'plugins' / 'architect-executor' / 'skills'
+PLUGINS_DIR = REPO_ROOT / 'plugins'
 GENERATOR = REPO_ROOT / 'scripts' / 'generate_binding.py'
 
 FRONTMATTER_RE = re.compile(r'^---\nname:\s*(.+?)\ndescription:\s*(.+?)\n---', re.DOTALL)
@@ -36,7 +36,7 @@ def main():
 
     failures = 0
     ran = 0
-    for template in sorted(SKILLS_DIR.glob('*/SKILL.template.md')):
+    for template in sorted(PLUGINS_DIR.glob('*/skills/*/SKILL.template.md')):
         skill_dir = template.parent
         out_path = skill_dir / 'SKILL.md'
         name, description = read_current_frontmatter(out_path)
