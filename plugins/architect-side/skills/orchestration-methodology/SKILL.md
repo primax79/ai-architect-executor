@@ -1,6 +1,6 @@
 ---
 name: orchestration-methodology
-description: Orchestrate an Executor agent through the Architect/Executor pattern - discovery-first exploration, isolation before delegating, non-blocking parallel delegation, complexity-scaled monitoring/intervention, real verification (not just reading the report), and defect telemetry. Use when coordinating development work delegated to another agent.
+description: "Orchestrate an Executor agent through the Architect/Executor pattern - discovery-first exploration, isolation before delegating, non-blocking parallel delegation, complexity-scaled monitoring/intervention, real verification (not just reading the report), and defect telemetry. Use when coordinating development work delegated to another agent."
 ---
 <!-- GENERATED FROM SKILL.template.md — DO NOT EDIT BY HAND. Run generate_binding.py to regenerate. -->
 

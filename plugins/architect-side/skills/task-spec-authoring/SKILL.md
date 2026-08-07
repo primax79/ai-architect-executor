@@ -1,6 +1,6 @@
 ---
 name: task-spec-authoring
-description: Write task specifications for an Executor agent and calibrate how deeply to verify what it produces - task granularity, the negative-claim rule, reference-drift, caller-tracing, one-task-one-commit, and risk-calibrated verification depth. Protocol-agnostic: applies whether the spec is dispatched through an MCP connector, a CLI wrapper, or handed over by hand - use it whenever a task spec is being written or an Executor's output is being reviewed, not only on any one dispatch path. For the manual/git-worktree mechanics of the CLI path specifically, see the sibling `task-delegation` skill.
+description: "Write task specifications for an Executor agent and calibrate how deeply to verify what it produces - task granularity, the negative-claim rule, reference-drift, caller-tracing, one-task-one-commit, and risk-calibrated verification depth. Protocol-agnostic: applies whether the spec is dispatched through an MCP connector, a CLI wrapper, or handed over by hand - use it whenever a task spec is being written or an Executor's output is being reviewed, not only on any one dispatch path. For the manual/git-worktree mechanics of the CLI path specifically, see the sibling `task-delegation` skill."
 ---
 
 # Task spec authoring

@@ -1,6 +1,6 @@
 ---
 name: headless-executor-contract
-description: Behavioral contract for an Executor agent running background tasks delegated by an orchestrating Architect AI - zero interactivity, focus_files contract, mandatory Final Report, fail fast, scope discipline. Protocol-agnostic (applies whether delegated over MCP, a CLI wrapper, or by hand).
+description: "Behavioral contract for an Executor agent running background tasks delegated by an orchestrating Architect AI - zero interactivity, focus_files contract, mandatory Final Report, fail fast, scope discipline. Protocol-agnostic (applies whether delegated over MCP, a CLI wrapper, or by hand)."
 ---
 <!-- GENERATED FROM SKILL.template.md — DO NOT EDIT BY HAND. Run generate_binding.py to regenerate. -->
 

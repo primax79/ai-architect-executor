@@ -1,6 +1,6 @@
 ---
 name: interactive-role-setup
-description: Interactively maps the kit's four abstract role profiles (deep-reasoning, orchestration, bulk-execution, exploration) to whatever models/hosts the operator actually has available, persists the mapping to roles.toml, and verifies it against the live host config rather than trusting it blindly. Use when setting up role-to-model mapping for the first time, or re-checking whether an existing mapping still holds (host settings drift, new models, tightened allowlists).
+description: "Interactively maps the kit's four abstract role profiles (deep-reasoning, orchestration, bulk-execution, exploration) to whatever models/hosts the operator actually has available, persists the mapping to roles.toml, and verifies it against the live host config rather than trusting it blindly. Use when setting up role-to-model mapping for the first time, or re-checking whether an existing mapping still holds (host settings drift, new models, tightened allowlists)."
 ---
 
 # Interactive role setup

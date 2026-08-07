@@ -1,6 +1,6 @@
 ---
 name: task-delegation
-description: Manual, git-based mechanics for handing a task off to an Executor agent working in its own dedicated git worktree, and for interacting with its live worktree afterward - applying a fix directly when file-edit tools are permission-blocked there, and deciding when it's safe to merge, rebase, or otherwise touch a branch it's actively working on. For what to put in the task spec itself and how deeply to verify the result - which apply regardless of dispatch path - see the sibling `task-spec-authoring` skill; this one is the operational layer specific to the manual/CLI path.
+description: "Manual, git-based mechanics for handing a task off to an Executor agent working in its own dedicated git worktree, and for interacting with its live worktree afterward - applying a fix directly when file-edit tools are permission-blocked there, and deciding when it's safe to merge, rebase, or otherwise touch a branch it's actively working on. For what to put in the task spec itself and how deeply to verify the result - which apply regardless of dispatch path - see the sibling `task-spec-authoring` skill; this one is the operational layer specific to the manual/CLI path."
 ---
 
 # Task Delegation
