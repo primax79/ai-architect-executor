@@ -76,6 +76,18 @@ in doubt, delegate rather than fix it yourself.
     assign each one a distinct port/container name/resource in the task
     instructions — decide this by design before dispatching, don't wait to
     discover the collision mid-run.
+  - **Worktree isolation does NOT isolate the repository's own configuration.**
+    `.git/config` is shared by every worktree of a repo, so a delegated task that
+    runs `git config` — or any tool that runs it on your behalf, e.g. `husky
+    init` setting `core.hooksPath` — writes into the configuration the user's
+    *own* checkout reads. Observed live: a lint-and-hooks task, correctly
+    isolated in its own worktree, was one command away from installing a
+    pre-commit hook on the user's working checkout of applications in daily
+    production use, where a broken hook would have blocked their real commits.
+    Any task that would touch repo-level configuration must be instructed to
+    create the files and **document the activation command instead of running
+    it**, and to prove it didn't by showing `git config --get <key>` returning
+    empty. Activation is the user's call, not the task's.
 - **Phase 3 — Delegation:** dispatch implementation work through the
   delegation channel. Prefer non-blocking delegation that returns
   immediately with a task handle — never block the conversation waiting on
@@ -137,6 +149,15 @@ in doubt, delegate rather than fix it yourself.
     the healthcheck, and query the resulting service/DB for real.
   - See the `task-spec-authoring` skill for calibrating verification depth to
     task risk in more detail.
+- **Phase 5b — Verify the integration, not only the tasks.** Every task in a
+  batch can be green in its own worktree and the merged result still be broken:
+  tasks branched from the same commit cannot see each other. Observed live: two
+  tasks in one batch each declared their own `BBox` type in the same library;
+  lint and unit tests stayed green in both worktrees **and after the merge**,
+  and only the application build caught it (a duplicate-export error on the
+  library's barrel file). The integration gate is therefore not the union of the
+  tasks' own criteria: after every merge run lint, tests, **and a full build of a
+  consuming application**, and treat that as the batch's real acceptance.
 - **Phase 6 — Closure & Telemetry:** if defects are found, log them (vital
   for continuous prompt/specification tuning — see `delegation-roi-analysis`)
   and request a fix.
@@ -151,6 +172,44 @@ in doubt, delegate rather than fix it yourself.
     `git log --oneline --graph -6` (confirm the merge landed where
     intended). Remove the worktree once merged and no longer needed
     (`git worktree remove <path>`).
+
+## Scaffolding steps can write configuration for *your* harness
+
+When a delegated task runs a project generator, review what it actually
+committed file by file, not just the files you asked for. Observed live: a
+mainstream framework's `create-workspace` command emitted 51 files of agent
+configuration for six different AI harnesses, including a settings file for the
+orchestrator's own harness that registered an external plugin marketplace,
+enabled a plugin from it, and added a third-party analytics domain to the
+sandbox's allowed-domains list.
+
+Treat tool-authored harness, permission, or sandbox configuration as something
+to remove, not to silently adopt: the user didn't ask for it, and you cannot
+consent to a change in your own permissions on their behalf. Removing is the
+conservative direction; keeping it requires asking. Then say what you removed
+and why, rather than quietly cleaning up.
+
+## Track task state as a path, not a label
+
+"Done" is the state that lies. Keep at least these distinctions, and let only
+the orchestrator move a task between them — an Executor may only *deliver*:
+
+| state | means |
+| --- | --- |
+| in progress | the Executor is working |
+| **delivered** | it committed and reported. The criteria have been checked by nobody but their author |
+| **verified** | you re-ran the acceptance criteria yourself and they passed |
+| integrated | merged, with the post-merge gate (lint + tests + build) green |
+| **done with a caveat** | it works but carries a known defect — requires a written note saying what it is and who pays for it |
+| bounced | a criterion failed; it goes back into the *same* Executor session with the failing criterion quoted verbatim |
+| blocked | an unresolved upstream question makes it unspecifiable — must name the question |
+
+The rule carrying the weight: **there is no direct path from "in progress" to
+"done."** "Delivered" always sits in between, and leaving it costs a re-run.
+Publish this vocabulary somewhere durable — a status file in the repo — if the
+work spans more than one session: a progress table whose only states are
+done/not-done cannot express "integrated but never actually opened in a
+browser," which is exactly the state most likely to be wrong.
 
 Remember: if the Executor exposes semantic codebase search as a standing
 capability, it's useful for your own exploration and Q&A too — use it even

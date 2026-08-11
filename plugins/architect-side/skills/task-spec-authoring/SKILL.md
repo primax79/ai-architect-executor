@@ -27,7 +27,7 @@ Executor-implemented tasks — a cross-file conversion macroplan, roughly
 
 Not for writing the plan's overall structure — use `macroplan-authoring`
 for that (this skill is about the *content* of individual tasks and about
-verifying them, not about the `task/` tree scaffolding). Its
+verifying them, not about the `tasks/` tree scaffolding). Its
 `references/template.md` already has the file skeleton (Goal / Steps /
 Verification) for each task-file shape; the rules below are what to put in
 those fields, not a competing template.
@@ -96,6 +96,35 @@ across several tasks may otherwise sweep up unrelated pending work
 The Executor's own behavioral contract (`headless-executor-contract`) is
 what must actually honor this at commit time; this is the spec-side half —
 say it explicitly so there's something to hold the Executor to.
+
+## Writing specs for a batch of parallel tasks
+
+Tasks dispatched in parallel branch from the same commit and cannot see each
+other. Four things in the spec turn the merge from painful into cheap:
+
+- **Give each task a disjoint write scope, down to the directory** — not "work
+  in library X" but "only `library-x/src/<your-subdir>/`, and nothing else."
+- **Name the one shared file they may all touch, and constrain how.** A
+  barrel/index file is usually unavoidable: tell every task to add exactly its
+  own export line and to reformat nothing else. The conflict then lands in one
+  known file and resolves in seconds instead of spreading across the batch.
+- **Disjoint directories do not prevent name collisions.** Two tasks writing
+  different subdirectories of the same library can still export the same type
+  name, and each is green on its own. When several tasks in a batch touch one
+  library, pre-assign the shared vocabulary in the specs (say which task owns
+  `BBox`, `TileKey`, …) or expect to resolve it at integration — but plan for
+  it rather than discover it.
+- **Pin the toolchain in the spec and in your own verification commands.** If
+  the project needs a runtime version the machine's default shell doesn't
+  provide, set it explicitly in the delegation environment *and* in every
+  command you run to check the result. A default shell on the wrong major
+  version produces failures that look like the task's fault and aren't.
+
+One more that only appears when a formatter is in the batch: **a task that
+establishes a formatting baseline conflicts with every sibling by
+construction**, since they all branched before it existed. Merge it last, then
+run the formatter once over the integrated result as a separate, clearly
+labelled commit.
 
 ## Verifying the result: match depth to risk, don't verify everything the same way
 

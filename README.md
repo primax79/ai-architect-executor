@@ -61,7 +61,7 @@ have no binding-specific counterpart — they don't need one.
 - **[`agentic-coding-kit`](https://github.com/primax79/agentic-coding-kit)** —
   one real dependency in this direction: several skills here
   (`task-spec-authoring`, `orchestration-methodology`) reference the
-  `task/` tree convention owned by that repo's `macroplan-authoring` skill
+  `tasks/` tree convention owned by that repo's `macroplan-authoring` skill
   (`common-tools` plugin) for multi-session/delegated work. Install that
   plugin alongside this one if you use macroplan-style task trees — this
   repo does not vendor or duplicate that convention (see
