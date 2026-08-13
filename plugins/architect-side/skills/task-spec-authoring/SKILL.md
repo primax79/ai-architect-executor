@@ -112,7 +112,7 @@ other. Four things in the spec turn the merge from painful into cheap:
   different subdirectories of the same library can still export the same type
   name, and each is green on its own. When several tasks in a batch touch one
   library, pre-assign the shared vocabulary in the specs (say which task owns
-  `BBox`, `TileKey`, …) or expect to resolve it at integration - but plan for
+  `BBox`, `TileKey`, ...) or expect to resolve it at integration - but plan for
   it rather than discover it.
 - **Pin the toolchain in the spec and in your own verification commands.** If
   the project needs a runtime version the machine's default shell doesn't
