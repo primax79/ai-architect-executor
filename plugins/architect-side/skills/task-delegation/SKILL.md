@@ -8,14 +8,14 @@ description: "Manual, git-based mechanics for handing a task off to an Executor 
 ## Purpose
 
 The manual/CLI path to an Executor has no MCP server tracking sessions or
-task state on your behalf — the git worktree itself is the only record of
+task state on your behalf - the git worktree itself is the only record of
 what's happening. This skill is the operational discipline that keeps
 that safe: how to touch a worktree you don't have direct file-edit access
 to, and how to avoid racing a session that's still live in it.
 
 For everything about the *content* of the task spec and how to verify
-what comes back — task granularity, ground-truth drift, caller-tracing,
-one-task-one-commit, risk-calibrated verification — see `task-spec-authoring`,
+what comes back - task granularity, ground-truth drift, caller-tracing,
+one-task-one-commit, risk-calibrated verification - see `task-spec-authoring`,
 which applies to this path exactly as much as to any other.
 
 ## When to use
@@ -40,10 +40,10 @@ materialize it via `checkout-index`), or run
 
 **Before any git operation that touches a shared/live working tree**
 (merge, revert, checkout, reset): check `git status` first. If there's
-substantial live uncommitted work in progress, don't interrupt it — work
+substantial live uncommitted work in progress, don't interrupt it - work
 only on files it isn't currently touching, or wait for a natural commit
 checkpoint. **Never pause or interrupt a live Executor session to ask
-permission before proceeding around it** — the default is to let it keep
+permission before proceeding around it** - the default is to let it keep
 running; raise a coordination question only if genuinely blocked with no
 safe path forward (e.g. every file you'd need to touch is already open in
 the live session).
