@@ -108,6 +108,21 @@ in doubt, delegate rather than fix it yourself.
     plan/commentary/cost, not just an OS-level heuristic (elapsed time,
     whether the process exists) - the latter tells you the task is running,
     not what it's actually doing.
+  - **A "WORKING" verdict from the OS-level heuristic is not enough on its
+    own - always cross-check it against cost/tokens/plan before trusting
+    it.** That heuristic proves a socket is open to the model, not that the
+    call is converging: a task can sit "connected, long call in progress"
+    for many minutes while burning real cost on every turn. The tell is a
+    low CPU-time/elapsed-time ratio (seconds of CPU across many minutes of
+    wall clock - waiting on the network, not computing) combined with a
+    ballooning cost/token count and no recorded plan, especially after a
+    corrective delegation that resumed a prior session: it usually means
+    the task is re-reading its own accumulated context every turn instead
+    of acting on it. Observed live: a corrective delegation resuming a
+    failed session ran 50+ minutes and \$7+ in cost with under two minutes
+    of CPU time and no plan ever recorded - cancelled and redone directly
+    rather than left to keep burning. Make this cross-check routine, not
+    something reached for only once a task already looks slow.
   - **If a task drifts off-spec or looks stuck:** cancel it (a hard stop,
     not a graceful abort). Review the resulting workspace diff for partial
     changes, then either revert or continue with a corrective delegation
