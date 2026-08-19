@@ -188,6 +188,59 @@ in doubt, delegate rather than fix it yourself.
     intended). Remove the worktree once merged and no longer needed
     (`git worktree remove <path>`).
 
+## Analysis/exploration requests need the same specification rigor as implementation requests
+
+"Analyze this project" is not a complete task spec - it's exactly as
+underspecified as "improve the code," and an Executor handed either will
+return the cheapest thing that technically satisfies it. Observed live: a
+request to analyze a project came back as a few-line document restating
+what the project is about and summarizing task-progress status - content
+already sitting in the README and the status file, not analysis. The
+Executor didn't fail the request; the request never said what analysis
+meant.
+
+Before dispatching an analysis/exploration task (report-shaped output, no
+code change), state at least:
+
+- **Scope, explicitly bounded.** Not "the project" - name the
+  subsystem(s)/directories/entry points in scope, and whether the
+  boundary is static (read the source) or behavioral (also run it, hit
+  its endpoints, execute its tests). An unbounded scope invites a
+  README-level summary because that's the only thing that fits any
+  possible boundary.
+- **Depth, named on a scale, not left implicit.** "Skim and summarize" and
+  "trace every call site of X across the codebase" are both legitimate
+  asks, but they produce completely different reports and cost - pick one
+  and say so. Silence defaults to the shallow end, every time.
+- **The problem categories actually wanted**, by name: correctness bugs,
+  security exposure, performance/scaling limits, architectural coupling,
+  test-coverage gaps, dependency/supply-chain risk, dead code, API
+  inconsistency, whatever is relevant - a generic "find issues" produces a
+  generic wrap-up. This is the same negative-claim/grounding discipline
+  `task-spec-authoring` requires for code-changing
+  tasks, applied to findings instead of diffs: every claimed problem must
+  cite the real file/line/symbol it comes from, not a generality inferred
+  from the README or a directory listing.
+- **The deliverable's shape.** How many findings, what evidence per
+  finding (citation, reproduction, severity), whether a verdict/priority
+  ranking is expected, whether comparison against a baseline/spec/other
+  codebase is in scope. If you want the same structure a spec/task review
+  uses (executive assessment, findings by severity, per-area
+  recommendations, final verdict - see
+  `task-spec-authoring`'s review format), say
+  that explicitly rather than assuming the Executor will reach for it on
+  its own.
+- **A negative instruction against restating existing docs.** Explicitly
+  tell the Executor not to reproduce content already available in the
+  README/status file/docs as if it were a finding - that's the specific
+  failure mode observed live, and it's cheap to rule out by name.
+
+Verification for an analysis deliverable follows the same Phase 5
+discipline as code: skim-checking the report's own claims isn't
+verification. Spot-check a sample of its findings against the real
+file/line it cites, the same way a code diff gets actually executed
+rather than just read.
+
 ## Scaffolding steps can write configuration for *your* harness
 
 When a delegated task runs a project generator, review what it actually
