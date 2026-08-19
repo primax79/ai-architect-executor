@@ -26,7 +26,13 @@ def read_current_frontmatter(skill_md):
     m = FRONTMATTER_RE.match(text)
     if not m:
         return None, None
-    return m.group(1).strip(), m.group(2).strip()
+    name = m.group(1).strip()
+    description = m.group(2).strip()
+    if description.startswith('"') and description.endswith('"'):
+        description = description[1:-1]
+    elif description.startswith("'") and description.endswith("'"):
+        description = description[1:-1]
+    return name, description
 
 
 def main():

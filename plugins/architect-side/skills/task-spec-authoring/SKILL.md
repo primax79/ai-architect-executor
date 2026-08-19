@@ -37,6 +37,57 @@ inside an Executor's dedicated worktree, or deciding when it's safe to
 touch a branch it's actively working on - see the sibling `task-delegation`
 skill for that operational layer.
 
+## Writing the spec: cross-check with other available engines before finalizing
+
+A spec that only one reasoning engine has judged is one uncaught blind
+spot away from an expensive mistake discovered mid-execution. When other
+independent AI engines are available in the session (other MCP
+connectors, CLI tools, agents - whatever the environment exposes),
+submit a non-trivial draft spec to them for review before treating it as
+final: ask them to find gaps, contradictions, or unstated assumptions,
+not just to rubber-stamp it. **Independence doesn't require a different
+underlying model** - a fresh, context-blind subagent instance of
+yourself, with no memory of having authored the spec, is also a genuine
+independent check: the bias removed is authorship bias, not model
+identity, so a blind self-review is a legitimate (and often
+cheaper/faster) member of the review panel, not a substitute for one
+when nothing else is available. Where any reviewer's read disagrees with
+yours, work through the disagreement (with them or with the user) rather
+than silently picking a side or averaging the two. This costs little compared
+to a flawed spec being discovered only after delegated work is already
+built on top of it.
+
+This is a cycle, not a fixed two-step: when a round finds blocking
+issues, fix the spec and submit the corrected version to the next cycle.
+Split the panel rather than treating every reviewer the same on cycle 2+:
+**pass most reviewers the prior cycle's findings/summary directly** and
+ask specifically whether each fix actually closes its finding and
+whether it introduces a new one - that's targeted verification, and
+it's what most of the panel should be doing by then. But **keep at least
+one reviewer genuinely blind every cycle** (no summary, and an explicit
+instruction to ignore any "prior review" link the spec file itself now
+carries in its header) - a panel that's fully primed on the known list
+tends to check those boxes and stop looking, so an unanchored pass stays
+valuable for catching something orthogonal the known list doesn't cover,
+not just for the first cycle. Keep cycling until every reviewer comes
+back clean, or until you (the orchestrator) judge the remaining
+disagreement or residual risk acceptable to proceed on - that judgment
+call is yours to make, not a rule requiring literal unanimous sign-off
+forever; state the call explicitly when you make it rather than quietly
+stopping. One real trial of this (three engines, one non-trivial task
+set) had all three independently catch the same transaction-breaking
+bug with zero overlap in prompts, plus each engine additionally catching
+a distinct real issue the others missed - evidence that the practice
+earns its cost more often than "it probably would have been fine."
+
+Within a batch of specs/tasks awaiting this cross-check, don't block
+everything on the slowest one: a task with no blocking finding against
+its own content, and no dependency on a task that's being corrected
+(check this at the file/module level, not just the task-graph level -
+two tasks can share no stated dependency yet still edit the same file),
+is safe to delegate for implementation while the others go through
+another cycle.
+
 ## Writing the spec: task granularity is the single biggest lever on defect rate
 
 Narrow, single-module tasks come back clean almost every time. The one
