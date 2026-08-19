@@ -14,7 +14,7 @@ Executor over MCP, a CLI wrapper, or by hand (see the sibling
 `task-delegation` skill for the manual path), the six phases below are the
 same methodology. Concrete tool names for a specific binding (e.g. Kilo
 over MCP) live in that binding's own repo - see
-[`kilo-mcp`](https://github.com/primax79/kilo-mcp)'s `mcp-orchestrator`
+[`kilo-mcp`](https://github.com/primax79/kilo-mcp)'s `kilo-mcp-orchestrator`
 skill for the fully concrete version this skill was distilled from.
 {{/BLOCK}}
 
