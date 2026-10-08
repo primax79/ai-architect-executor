@@ -89,13 +89,8 @@ claude plugin marketplace add https://github.com/primax79/ai-architect-executor.
 /plugin install architect-side   # or executor-side, or shared - pick what you need
 ```
 
-**Kilo Code**, via `kilo-plugin-manager` (pick the plugin(s) you need - `architect-side`,
-`executor-side`, `shared`, or several):
-
-```bash
-python3 ~/.kilo/skills/kilo-plugin-manager/scripts/plugin_manager.py add https://github.com/primax79/ai-architect-executor.git --name ai-architect-executor
-python3 ~/.kilo/skills/kilo-plugin-manager/scripts/plugin_manager.py install architect-side@ai-architect-executor
-```
+**Kilo Code**: install with the AI Swissknife VS Code extension (or its CLI) (pick the
+plugin(s) you need - `architect-side`, `executor-side`, `shared`, or several),
 
 or Kilo's native Skill URLs (no extra tooling, one URL per plugin):
 
